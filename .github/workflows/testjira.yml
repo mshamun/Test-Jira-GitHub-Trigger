@@ -10,7 +10,20 @@ jobs:
   Commit_Checker:
     runs-on: ubuntu-latest
     
-    steps:       
+    steps: 
+    - name: checkout repo content
+      uses: actions/checkout@v2
+    
+    - name: setup python
+      uses: actions/setup-python@v2
+      with:
+        python-version: 3.8
+    
+    - name: Generate Manifest
+      id: jira_create_manifest
+      run: |
+        output=$(python generate_manifest.py ${{steps.jira_issue.outputs.Issue}})
+        echo "${output}}"
     - name: Comment on issue
       uses: atlassian/gajira-comment@master
       with:
